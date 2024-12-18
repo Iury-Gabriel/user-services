@@ -13,6 +13,35 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Site {
+  id          String   @id @default(cuid())
+  name        String
+  location    String
+  pricePerDay Float    @default(0)
+  rating      Float    @default(0)
+  description String
+  images      String[]
+  ownerId     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  reservations Reservation[]
+}
+
+model Reservation {
+  id              String   @id @default(cuid())
+  userId          String
+  siteId          String
+  dataReservation DateTime
+  dataCheckout    DateTime
+  status          String
+  total           Float
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now())
+
+  site Site @relation(fields: [siteId], references: [id])
+}
+
 model User {
   id        String   @id @default(cuid())
   name      String
